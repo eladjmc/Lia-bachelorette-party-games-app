@@ -1,0 +1,140 @@
+{
+  "app": {
+    "title": "מסיבת הרווקות של לייה",
+    "loading": "טוען...",
+    "connecting": "מתחבר לשרת...",
+    "disconnected": "אין חיבור לשרת",
+    "retry": "נסה שוב",
+    "error": "משהו השתבש"
+  },
+  "common": {
+    "cancel": "ביטול",
+    "confirm": "אישור"
+  },
+  "entry": {
+    "title": "ברוכות הבאות",
+    "subtitle": "בחרי שם ונסיכה והצטרפי לחגיגה",
+    "name": "שם תצוגה",
+    "namePlaceholder": "איך לקרוא לך?",
+    "avatar": "בחרי נסיכה",
+    "guest": "אורחת",
+    "host": "מארחת",
+    "password": "סיסמת מארחת",
+    "passwordPlaceholder": "הזיני סיסמה",
+    "join": "כניסה למשחק",
+    "avatarTaken": "תפוס",
+    "errors": {
+      "INVALID_NAME": "השם חייב להכיל בין 1 ל־20 תווים",
+      "INVALID_AVATAR": "דמות לא תקינה",
+      "AVATAR_ALREADY_TAKEN": "הנסיכה כבר תפוסה",
+      "INVALID_HOST_PASSWORD": "סיסמת מארחת שגויה",
+      "HOST_ALREADY_ACTIVE": "כבר יש מארחת פעילה",
+      "SESSION_FULL": "החדר מלא (עד 12 משתתפות)",
+      "INVALID_PLAYER_TOKEN": "יש להצטרף מחדש",
+      "VALIDATION_ERROR": "נתונים לא תקינים"
+    }
+  },
+  "lobby": {
+    "waiting": "ממתינות שהמארחת תבחר משחק",
+    "players": "הנסיכות בחדר",
+    "playersCount": "משתתפות",
+    "connected": "מחוברת",
+    "disconnected": "מנותקת",
+    "host": "מארחת",
+    "you": "את",
+    "startTrivia": "טריוויה",
+    "startParcel": "חבילה עוברת",
+    "startTruthOrDare": "שאלה או חובה",
+    "needGuest": "צריך לפחות אורחת אחת מחוברת כדי להתחיל",
+    "resetSession": "אפס לובי",
+    "resetSessionTitle": "איפוס לובי",
+    "resetSessionConfirm": "לנקות את כל המשתתפות (חוץ ממך) ולחזור ללובי ריק?",
+    "resetSessionAction": "אפסי לובי",
+    "chooseGame": "בחרי משחק",
+    "leave": "התנתקות",
+    "leaveHint": "כדי לשנות שם או נסיכה"
+  },
+  "session": {
+    "pausedTitle": "המשחק מושהה",
+    "pausedBody": "המארחת התנתקה. ממתינות שהמארחת תתחבר מחדש או שמארחת חדשה תיכנס עם הסיסמה.",
+    "leave": "יציאה"
+  },
+  "intro": {
+    "ready": "מתחילות בעוד רגע",
+    "howToPlay": "איך משחקים",
+    "startsIn": "המשחק מתחיל אוטומטית",
+    "go": "יאללה!",
+    "triviaTitle": "טריוויה מלכותית",
+    "triviaSteps": [
+      "כל שאלה מופיעה לכולן באותו זמן",
+      "המארחת עונה קודם — התשובה שלה היא הנכונה",
+      "אחרי שכולן ענו (או שהמארחת מסיימת סיבוב) רואים תוצאות"
+    ],
+    "parcelTitle": "חבילה עוברת",
+    "parcelSteps": [
+      "החבילה עוברת בין המשתתפות",
+      "מי שנבחרת עונה על שאלה",
+      "המארחת ממשיכה לסיבוב הבא אחרי התשובה"
+    ],
+    "todTitle": "שאלה או חובה",
+    "todStep1": "הבקבוק מסתובב ובוחר משתתפת (גם המארחת)",
+    "todStep2": "יש {{count}} סיבובים של שאלה או חובה",
+    "todStep2NoCount": "משחקים כמה סיבובים של שאלה או חובה",
+    "todStep3": "אם המארחת נבחרת — הסיבוב לא נספר במניין"
+  },
+  "trivia": {
+    "title": "טריוויה מלכותית",
+    "question": "שאלה",
+    "of": "מתוך",
+    "waitingAnswers": "ממתינות לתשובות...",
+    "hostMustAnswer": "עני קודם כמארחת, ואז אפשר לסיים את הסיבוב",
+    "reveal": "סיום סיבוב",
+    "waitingForOthers": "התשובה נשלחה. ממתינות לשאר המשתתפות או שהמארחת תסיים את הסיבוב.",
+    "waitingForHost": "התשובה נשלחה. ממתינות לסיום הסיבוב אחרי שכל האורחות ענו — או לחצי סיום סיבוב.",
+    "answerProgress": "{{answered}} מתוך {{total}} ענו",
+    "roundResults": "תוצאות הסיבוב",
+    "correctAnswer": "התשובה הנכונה",
+    "yourAnswer": "הבחירה שלך",
+    "next": "לשאלה הבאה",
+    "correct": "נכון!",
+    "incorrect": "טעות",
+    "noAnswer": "לא ענית",
+    "youAnswered": "התשובה נשלחה",
+    "optionCounts": "בחירות השחקניות",
+    "leaderboard": "לוח תוצאות",
+    "score": "נקודות",
+    "time": "זמן",
+    "gameOver": "המשחק נגמר",
+    "winner": "כל הכבוד!",
+    "endGame": "סיום וחזרה ללובי"
+  },
+  "parcel": {
+    "title": "חבילה עוברת",
+    "spinning": "החבילה עוברת...",
+    "questionFor": "שאלה עבור",
+    "next": "הבא",
+    "completed": "סיימנו את כל השאלות!",
+    "endGame": "חזרה ללובי",
+    "chosen": "נבחרה!"
+  },
+  "tod": {
+    "title": "שאלה או חובה",
+    "spinning": "הבקבוק מסתובב...",
+    "truth": "שאלה",
+    "dare": "חובה",
+    "for": "עבור",
+    "next": "הבא",
+    "progress": "סיבוב",
+    "completed": "כל השאלות והחובות הושלמו!",
+    "endGame": "חזרה ללובי",
+    "hostDare": "חובה עלייך - לשתות צ'ייסר"
+  },
+  "host": {
+    "advance": "המשך",
+    "endGame": "סיים משחק",
+    "abortGame": "בטל משחק",
+    "endGameTitle": "ביטול משחק",
+    "endGameConfirm": "לבטל את המשחק ולחזור ללובי? ההתקדמות הנוכחית תימחק.",
+    "endGameAction": "בטלי משחק"
+  }
+}

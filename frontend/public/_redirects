@@ -1,0 +1,3 @@
+# SPA fallback — needed for client routes like /session
+# Works on Render Static Sites and Netlify
+/*    /index.html   200
