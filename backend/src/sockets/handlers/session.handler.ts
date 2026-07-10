@@ -2,7 +2,7 @@ import type { Server, Socket } from "socket.io";
 import { SOCKET_EVENTS } from "../../constants/socket-events.constants.js";
 import { joinAsHost } from "../../services/host.service.js";
 import { createPlayer } from "../../services/player.service.js";
-import { leaveByToken, reconnectPlayer } from "../../services/reconnect.service.js";
+import { clearGraceTimer, leaveByToken, reconnectPlayer } from "../../services/reconnect.service.js";
 import { getSession } from "../../services/session.service.js";
 import {
   joinGuestSchema,
@@ -12,7 +12,7 @@ import {
 } from "../../validation/session.schemas.js";
 import { serializeSessionForPlayer } from "../serializers/session.serializer.js";
 import { handleAckError, okAck, parsePayload } from "../socket-context.js";
-import { broadcastSessionState, emitToAll } from "../socket-server.js";
+import { broadcastSessionState, emitToAll, getIo } from "../socket-server.js";
 import type { AckCallback } from "../../types/socket.types.js";
 import type { JoinSuccessData } from "../../types/dto.types.js";
 
@@ -49,13 +49,21 @@ export function registerSessionHandlers(_io: Server, socket: Socket): void {
     (payload: unknown, ack?: AckCallback<JoinSuccessData>) => {
       try {
         const data = parsePayload(joinHostSchema, payload);
-        const wasPaused = getSession().phase === "paused_no_host";
-        const player = joinAsHost({
+        const { player, displacedHosts, endedActivePlay } = joinAsHost({
           displayName: data.displayName,
           avatarId: data.avatarId,
           password: data.password,
           socketId: socket.id,
         });
+
+        const io = getIo();
+        for (const oldHost of displacedHosts) {
+          clearGraceTimer(oldHost.id);
+          if (oldHost.socketId && io) {
+            io.to(oldHost.socketId).emit(SOCKET_EVENTS.SESSION_RESET);
+          }
+        }
+
         const session = getSession();
         const publicSession = serializeSessionForPlayer(session, player.id);
         ack?.(
@@ -66,8 +74,8 @@ export function registerSessionHandlers(_io: Server, socket: Socket): void {
           }),
         );
         broadcastSessionState();
-        if (wasPaused && session.phase === "playing") {
-          emitToAll(SOCKET_EVENTS.SESSION_RESUMED);
+        if (endedActivePlay) {
+          emitToAll(SOCKET_EVENTS.GAME_ENDED);
         }
       } catch (error) {
         handleAckError(error, ack);

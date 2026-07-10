@@ -4,18 +4,13 @@ import { HOST_PASSWORD_RATE_LIMIT } from "../constants/game.constants.js";
 import type { InternalPlayer } from "../types/player.types.js";
 import { verifyHostPassword } from "../utils/password.util.js";
 import { nowMs } from "../utils/time.util.js";
-import {
-  assertAvatarAvailable,
-  assertSessionHasCapacity,
-  assertValidDisplayName,
-  createPlayer,
-} from "./player.service.js";
+import { clearGameCountdown } from "./game-countdown.service.js";
+import { createPlayer } from "./player.service.js";
 import {
   AppError,
-  findPlayerById,
-  getConnectedHost,
   getSession,
   removePlayer,
+  resetSessionToLobby,
   setHostPlayerId,
   setSessionPhase,
   touchSession,
@@ -48,64 +43,50 @@ export function assertValidHostPassword(password: string, rateLimitKey: string):
   }
 }
 
+export interface HostJoinResult {
+  player: InternalPlayer;
+  /** Previous host(s) removed by takeover (snapshot before removal). */
+  displacedHosts: InternalPlayer[];
+  /** True when an active game or countdown was cleared for the new host. */
+  endedActivePlay: boolean;
+}
+
+/**
+ * Join as host with password. Always takes over: removes any previous host,
+ * ends any running/paused game or countdown, and starts fresh in the lobby.
+ */
 export function joinAsHost(params: {
   displayName: string;
   avatarId: string;
   password: string;
   socketId: string;
-}): InternalPlayer {
+}): HostJoinResult {
   assertValidHostPassword(params.password, params.socketId);
 
-  const connectedHost = getConnectedHost();
-  if (connectedHost) {
-    throw new AppError(ERROR_CODES.HOST_ALREADY_ACTIVE, "A host is already active");
-  }
-
   const session = getSession();
-  const disconnectedHost =
-    session.hostPlayerId != null
-      ? findPlayerById(session.hostPlayerId)
-      : undefined;
 
-  const canReplaceDisconnectedHost =
-    disconnectedHost != null &&
-    disconnectedHost.role === "host" &&
-    disconnectedHost.connectionStatus === "disconnected";
+  const previousHosts = session.players.filter(
+    (p) => p.role === "host" || p.id === session.hostPlayerId,
+  );
+  const displacedHosts = previousHosts.map((p) => ({ ...p }));
 
-  if (canReplaceDisconnectedHost && disconnectedHost) {
-    const displayName = assertValidDisplayName(params.displayName);
-    assertAvatarAvailable(params.avatarId, disconnectedHost.id);
-
-    removePlayer(disconnectedHost.id);
-
-    const replacement = createPlayer({
-      displayName,
-      avatarId: params.avatarId,
-      role: "host",
-      socketId: params.socketId,
-    });
-
-    setHostPlayerId(replacement.id);
-    if (session.phase === "paused_no_host") {
-      resumeAfterHostAvailable();
-    }
-    return replacement;
+  for (const old of previousHosts) {
+    removePlayer(old.id);
   }
 
-  assertSessionHasCapacity(1);
-  const host = createPlayer({
+  const endedActivePlay = Boolean(session.activeGame || session.gameCountdown);
+  clearGameCountdown();
+  resetSessionToLobby();
+
+  const player = createPlayer({
     displayName: params.displayName,
     avatarId: params.avatarId,
     role: "host",
     socketId: params.socketId,
   });
-  setHostPlayerId(host.id);
+  setHostPlayerId(player.id);
 
-  if (session.phase === "paused_no_host") {
-    resumeAfterHostAvailable();
-  }
-
-  return host;
+  return { player, displacedHosts, endedActivePlay };
 }
 
 export function pauseForMissingHost(): void {
